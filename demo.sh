@@ -89,7 +89,8 @@ show_fit() {  # show_fit <file>   Same, with long lines cut to the terminal widt
 
 view() {   # view <description> <command...>   Really runs a viewer, unless NO_VISUAL=1.
   local what="$1"; shift
-  echo "${B}${GREEN}\$ $*${OFF}   ${DIM}(viewer: this one really runs)${OFF}"
+  local shown="$*"
+  echo "${B}${GREEN}\$ ${shown//$ROOT\//}${OFF}   ${DIM}(viewer: this one really runs)${OFF}"
   if [ "$NO_VISUAL" = "1" ]; then
     echo "${DIM}  skipped (NO_VISUAL): $what${OFF}"
     return
