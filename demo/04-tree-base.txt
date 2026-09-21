@@ -1,0 +1,5 @@
+HTTP→  POST /api/trpc/:param → HTTP 200 [270ms]
+  SQL    begin [0ms]
+  SQL    delete from "projects" where "projects"."id" = $? [1ms]
+  SQL    delete from "user_projects" where "user_projects"."project_id" = $? [0ms]
+  SQL    commit [0ms]

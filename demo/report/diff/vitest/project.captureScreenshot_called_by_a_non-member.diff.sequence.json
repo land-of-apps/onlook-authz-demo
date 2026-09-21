@@ -1,0 +1,59 @@
+{
+  "actors": [
+    {
+      "id": "http:HTTP server requests",
+      "name": "HTTP server requests",
+      "order": 0
+    },
+    {
+      "id": "package:project",
+      "name": "project",
+      "order": 1000
+    }
+  ],
+  "rootActions": [
+    {
+      "nodeType": 4,
+      "callee": "http:HTTP server requests",
+      "route": "POST /api/trpc/:param",
+      "status": 200,
+      "digest": "290b12ecd35abea8a0c2d04cf4c78ec0a870cc57ba571f5d5bc5939539922ea8",
+      "subtreeDigest": "unknown",
+      "children": [
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:project",
+          "name": "verifyProjectAccess",
+          "static": true,
+          "digest": "251bb6df3934870922aaa214d100160259f74295f9115e7a962c95488c114d21",
+          "subtreeDigest": "unknown",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "project/helper.verifyProjectAccess",
+            "raises_exception": true
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "Promise"
+            },
+            "raisesException": true
+          },
+          "children": [],
+          "elapsed": 0.004039526917040348,
+          "eventIds": [
+            2
+          ],
+          "labels": [
+            "security.authorization"
+          ],
+          "diffMode": 1
+        }
+      ],
+      "elapsed": 0.47331170504912734,
+      "eventIds": [
+        1
+      ]
+    }
+  ]
+}

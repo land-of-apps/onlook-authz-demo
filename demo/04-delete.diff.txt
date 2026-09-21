@@ -1,0 +1,6 @@
+changed HTTP server request `POST /api/trpc/:param` to return 500 instead of 200
+  removed SQL `delete from "projects" where "projects"."id" = $?`
+  removed SQL `delete from "user_projects" where "user_projects"."project_id" = $?`
+  added function call `project.verifyProjectAccess`
+    added SQL `select "projects"."id", "projects"."name", "projects"."description", "projects"."tags", "projects"."created_at", "projects"."updated_at
+  changed SQL `commit` to SQL `rollback`

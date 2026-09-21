@@ -1,0 +1,2 @@
+HTTP→  POST /api/trpc/:param → HTTP 200 [434ms]
+  SQL    delete from "user_projects" where ("user_projects"."user_id" = $? and "user_projects"."project_id" = $?) [1ms]

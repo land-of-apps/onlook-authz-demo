@@ -1,0 +1,1540 @@
+{
+  "testFailures": [],
+  "newAppMaps": [],
+  "removedAppMaps": [],
+  "changedAppMaps": [
+    {
+      "appmap": "vitest/project.addTag_called_by_a_non-member",
+      "sequenceDiagramDiff": "vitest/project.addTag_called_by_a_non-member.diff.sequence.json"
+    },
+    {
+      "appmap": "vitest/project.addTag_called_by_the_owner",
+      "sequenceDiagramDiff": "vitest/project.addTag_called_by_the_owner.diff.sequence.json"
+    },
+    {
+      "appmap": "vitest/project.captureScreenshot_called_by_a_non-member",
+      "sequenceDiagramDiff": "vitest/project.captureScreenshot_called_by_a_non-member.diff.sequence.json"
+    },
+    {
+      "appmap": "vitest/project.delete_called_by_a_non-member",
+      "sequenceDiagramDiff": "vitest/project.delete_called_by_a_non-member.diff.sequence.json"
+    },
+    {
+      "appmap": "vitest/project.delete_called_by_the_owner",
+      "sequenceDiagramDiff": "vitest/project.delete_called_by_the_owner.diff.sequence.json"
+    },
+    {
+      "appmap": "vitest/project.removeTag_called_by_a_non-member",
+      "sequenceDiagramDiff": "vitest/project.removeTag_called_by_a_non-member.diff.sequence.json"
+    },
+    {
+      "appmap": "vitest/project.update_called_by_a_non-member",
+      "sequenceDiagramDiff": "vitest/project.update_called_by_a_non-member.diff.sequence.json"
+    },
+    {
+      "appmap": "vitest/project.update_called_by_the_owner",
+      "sequenceDiagramDiff": "vitest/project.update_called_by_the_owner.diff.sequence.json"
+    },
+    {
+      "appmap": "vitest/project.update_of_a_project_that_does_not_exist",
+      "sequenceDiagramDiff": "vitest/project.update_of_a_project_that_does_not_exist.diff.sequence.json"
+    }
+  ],
+  "sequenceDiagramDiff": {
+    "added function call `project.verifyProjectAccess`": [
+      "vitest/project.addTag_called_by_the_owner",
+      "vitest/project.captureScreenshot_called_by_a_non-member"
+    ],
+    "changed HTTP server request `POST /api/trpc/:param` to return 500 instead of 200\n  removed SQL `select \"id\", \"name\", \"description\", \"tags\", \"created_at\", \"updated_at\", \"preview_img_url\", \"preview_img_path\", \"preview_img_bucket\", \"updated_preview_img_at\", \"sandbox_id\", \"sandbox_url\" from \"projects\" \"projects\" where \"projects\".\"id\" = $? limit $?`\n  removed SQL `update \"projects\" set \"tags\" = $?, \"updated_at\" = $? where \"projects\".\"id\" = $?`\n  added function call `project.verifyProjectAccess`": [
+      "vitest/project.addTag_called_by_a_non-member",
+      "vitest/project.removeTag_called_by_a_non-member"
+    ],
+    "changed HTTP server request `POST /api/trpc/:param` to return 500 instead of 200\n  removed SQL `delete from \"projects\" where \"projects\".\"id\" = $?`\n  removed SQL `delete from \"user_projects\" where \"user_projects\".\"project_id\" = $?`\n  added function call `project.verifyProjectAccess`\n    added SQL `select \"projects\".\"id\", \"projects\".\"name\", \"projects\".\"description\", \"projects\".\"tags\", \"projects\".\"created_at\", \"projects\".\"updated_at\", \"projects\".\"preview_img_url\", \"projects\".\"preview_img_path\", \"projects\".\"preview_img_bucket\", \"projects\".\"updated_preview_img_at\", \"projects\".\"sandbox_id\", \"projects\".\"sandbox_url\", \"projects_userProjects\".\"data\" as \"userProjects\" from \"projects\" \"projects\" left join lateral (select coalesce(json_agg(json_build_array(\"projects_userProjects\".\"user_id\", \"projects_userProjects\".\"project_id\", \"projects_userProjects\".\"created_at\", \"projects_userProjects\".\"role\")), ?::json) as \"data\" from \"user_projects\" \"projects_userProjects\" where (\"projects_userProjects\".\"project_id\" = \"projects\".\"id\" and \"projects_userProjects\".\"user_id\" = $?)) \"projects_userProjects\" on ? where \"projects\".\"id\" = $? limit $?`\n  changed SQL `commit` to SQL `rollback`": [
+      "vitest/project.delete_called_by_a_non-member"
+    ],
+    "added function call `project.verifyProjectAccess`\n  added SQL `select \"projects\".\"id\", \"projects\".\"name\", \"projects\".\"description\", \"projects\".\"tags\", \"projects\".\"created_at\", \"projects\".\"updated_at\", \"projects\".\"preview_img_url\", \"projects\".\"preview_img_path\", \"projects\".\"preview_img_bucket\", \"projects\".\"updated_preview_img_at\", \"projects\".\"sandbox_id\", \"projects\".\"sandbox_url\", \"projects_userProjects\".\"data\" as \"userProjects\" from \"projects\" \"projects\" left join lateral (select coalesce(json_agg(json_build_array(\"projects_userProjects\".\"user_id\", \"projects_userProjects\".\"project_id\", \"projects_userProjects\".\"created_at\", \"projects_userProjects\".\"role\")), ?::json) as \"data\" from \"user_projects\" \"projects_userProjects\" where (\"projects_userProjects\".\"project_id\" = \"projects\".\"id\" and \"projects_userProjects\".\"user_id\" = $?)) \"projects_userProjects\" on ? where \"projects\".\"id\" = $? limit $?`\nreordered SQL `delete from \"user_projects\" where \"user_projects\".\"project_id\" = $?` within `POST /api/trpc/:param`": [
+      "vitest/project.delete_called_by_the_owner"
+    ],
+    "changed HTTP server request `POST /api/trpc/:param` to return 500 instead of 200\n  removed SQL `update \"projects\" set \"id\" = $?, \"name\" = $?, \"updated_at\" = $? where \"projects\".\"id\" = $? returning \"id\", \"name\", \"description\", \"tags\", \"created_at\", \"updated_at\", \"preview_img_url\", \"preview_img_path\", \"preview_img_bucket\", \"updated_preview_img_at\", \"sandbox_id\", \"sandbox_url\"`\n  changed function call `project.fromDbProject` to function call `project.verifyProjectAccess` and changed to return Promise instead of Object\n    added SQL `select \"projects\".\"id\", \"projects\".\"name\", \"projects\".\"description\", \"projects\".\"tags\", \"projects\".\"created_at\", \"projects\".\"updated_at\", \"projects\".\"preview_img_url\", \"projects\".\"preview_img_path\", \"projects\".\"preview_img_bucket\", \"projects\".\"updated_preview_img_at\", \"projects\".\"sandbox_id\", \"projects\".\"sandbox_url\", \"projects_userProjects\".\"data\" as \"userProjects\" from \"projects\" \"projects\" left join lateral (select coalesce(json_agg(json_build_array(\"projects_userProjects\".\"user_id\", \"projects_userProjects\".\"project_id\", \"projects_userProjects\".\"created_at\", \"projects_userProjects\".\"role\")), ?::json) as \"data\" from \"user_projects\" \"projects_userProjects\" where (\"projects_userProjects\".\"project_id\" = \"projects\".\"id\" and \"projects_userProjects\".\"user_id\" = $?)) \"projects_userProjects\" on ? where \"projects\".\"id\" = $? limit $?`\n    removed function call `project.fromDbPreviewImg`": [
+      "vitest/project.update_called_by_a_non-member"
+    ],
+    "added function call `project.verifyProjectAccess`\n  added SQL `select \"projects\".\"id\", \"projects\".\"name\", \"projects\".\"description\", \"projects\".\"tags\", \"projects\".\"created_at\", \"projects\".\"updated_at\", \"projects\".\"preview_img_url\", \"projects\".\"preview_img_path\", \"projects\".\"preview_img_bucket\", \"projects\".\"updated_preview_img_at\", \"projects\".\"sandbox_id\", \"projects\".\"sandbox_url\", \"projects_userProjects\".\"data\" as \"userProjects\" from \"projects\" \"projects\" left join lateral (select coalesce(json_agg(json_build_array(\"projects_userProjects\".\"user_id\", \"projects_userProjects\".\"project_id\", \"projects_userProjects\".\"created_at\", \"projects_userProjects\".\"role\")), ?::json) as \"data\" from \"user_projects\" \"projects_userProjects\" where (\"projects_userProjects\".\"project_id\" = \"projects\".\"id\" and \"projects_userProjects\".\"user_id\" = $?)) \"projects_userProjects\" on ? where \"projects\".\"id\" = $? limit $?`\nadded function call `project.fromDbProject`\n  added function call `project.fromDbPreviewImg`\nremoved function call `project.fromDbProject`\n  removed function call `project.fromDbPreviewImg`": [
+      "vitest/project.update_called_by_the_owner"
+    ],
+    "added function call `project.verifyProjectAccess`\nremoved SQL `update \"projects\" set \"id\" = $?, \"name\" = $?, \"updated_at\" = $? where \"projects\".\"id\" = $? returning \"id\", \"name\", \"description\", \"tags\", \"created_at\", \"updated_at\", \"preview_img_url\", \"preview_img_path\", \"preview_img_bucket\", \"updated_preview_img_at\", \"sandbox_id\", \"sandbox_url\"`": [
+      "vitest/project.update_of_a_project_that_does_not_exist"
+    ]
+  },
+  "appMapMetadata": {
+    "base": {
+      "vitest/branch.getByProjectId_called_by_the_owner": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "branch.getByProjectId called by the owner",
+        "source_location": "test/server/branch.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/member.list_called_by_the_owner": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "member.list called by the owner",
+        "source_location": "test/server/member.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/member.remove_called_by_a_non-member": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "member.remove called by a non-member",
+        "source_location": "test/server/member.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/project.addTag_called_by_a_non-member": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "project.addTag called by a non-member",
+        "source_location": "test/server/project.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/project.addTag_called_by_the_owner": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "project.addTag called by the owner",
+        "source_location": "test/server/project.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/project.captureScreenshot_called_by_a_non-member": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "project.captureScreenshot called by a non-member",
+        "source_location": "test/server/project.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/project.delete_called_by_a_non-member": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "project.delete called by a non-member",
+        "source_location": "test/server/project.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/project.delete_called_by_the_owner": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "project.delete called by the owner",
+        "source_location": "test/server/project.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/project.get_called_by_a_non-member": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "project.get called by a non-member",
+        "source_location": "test/server/project.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/project.get_called_by_the_owner": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "project.get called by the owner",
+        "source_location": "test/server/project.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/project.get_without_signing_in": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "project.get without signing in",
+        "source_location": "test/server/project.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/project.list_called_by_the_owner": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "project.list called by the owner",
+        "source_location": "test/server/project.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/project.removeTag_called_by_a_non-member": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "project.removeTag called by a non-member",
+        "source_location": "test/server/project.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/project.update_called_by_a_non-member": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "project.update called by a non-member",
+        "source_location": "test/server/project.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/project.update_called_by_the_owner": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "project.update called by the owner",
+        "source_location": "test/server/project.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/project.update_of_a_project_that_does_not_exist": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "project.update of a project that does not exist",
+        "source_location": "test/server/project.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/settings.upsert_called_by_a_non-member": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "settings.upsert called by a non-member",
+        "source_location": "test/server/settings.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/settings.upsert_called_by_the_owner": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "settings.upsert called by the owner",
+        "source_location": "test/server/settings.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      }
+    },
+    "head": {
+      "vitest/branch.getByProjectId_called_by_the_owner": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "branch.getByProjectId called by the owner",
+        "source_location": "test/server/branch.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/member.list_called_by_the_owner": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "member.list called by the owner",
+        "source_location": "test/server/member.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/member.remove_called_by_a_non-member": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "member.remove called by a non-member",
+        "source_location": "test/server/member.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/project.addTag_called_by_a_non-member": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "project.addTag called by a non-member",
+        "source_location": "test/server/project.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/project.addTag_called_by_the_owner": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "project.addTag called by the owner",
+        "source_location": "test/server/project.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/project.captureScreenshot_called_by_a_non-member": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "project.captureScreenshot called by a non-member",
+        "source_location": "test/server/project.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/project.delete_called_by_a_non-member": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "project.delete called by a non-member",
+        "source_location": "test/server/project.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/project.delete_called_by_the_owner": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "project.delete called by the owner",
+        "source_location": "test/server/project.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/project.get_called_by_a_non-member": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "project.get called by a non-member",
+        "source_location": "test/server/project.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/project.get_called_by_the_owner": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "project.get called by the owner",
+        "source_location": "test/server/project.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/project.get_without_signing_in": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "project.get without signing in",
+        "source_location": "test/server/project.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/project.list_called_by_the_owner": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "project.list called by the owner",
+        "source_location": "test/server/project.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/project.update_called_by_a_non-member": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "project.update called by a non-member",
+        "source_location": "test/server/project.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/project.removeTag_called_by_a_non-member": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "project.removeTag called by a non-member",
+        "source_location": "test/server/project.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/project.update_called_by_the_owner": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "project.update called by the owner",
+        "source_location": "test/server/project.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/project.update_of_a_project_that_does_not_exist": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "project.update of a project that does not exist",
+        "source_location": "test/server/project.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/settings.upsert_called_by_a_non-member": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "settings.upsert called by a non-member",
+        "source_location": "test/server/settings.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      },
+      "vitest/settings.upsert_called_by_the_owner": {
+        "client": {
+          "name": "appmap-node",
+          "version": "2.26.3",
+          "url": "https://github.com/getappmap/appmap-node"
+        },
+        "language": {
+          "name": "javascript",
+          "engine": "Node.js",
+          "version": "v22.23.2"
+        },
+        "app": "onlook-web-client",
+        "recorder": {
+          "type": "tests",
+          "name": "vitest"
+        },
+        "name": "settings.upsert called by the owner",
+        "source_location": "test/server/settings.test.ts",
+        "test_status": "succeeded",
+        "sanitized": {
+          "version": "3.201.3",
+          "allow_values": []
+        }
+      }
+    }
+  },
+  "findingDiff": {
+    "new": [
+      {
+        "appMapFile": "vitest/project.addTag_called_by_a_non-member.appmap.json",
+        "checkId": "authz-before-authn",
+        "ruleId": "authz-before-authn",
+        "ruleTitle": "Authorization performed before authentication",
+        "event": {
+          "event": "call",
+          "id": 2,
+          "thread_id": 0,
+          "method_id": "verifyProjectAccess",
+          "static": true,
+          "parameters": [
+            {
+              "class": "NodePgDatabase",
+              "value": "<v12>",
+              "object_id": 7,
+              "name": "db"
+            },
+            {
+              "class": "String",
+              "value": "<v13>",
+              "name": "userId"
+            },
+            {
+              "class": "String",
+              "value": "<v14>",
+              "name": "projectId"
+            }
+          ],
+          "defined_class": "helper",
+          "path": "src/server/api/routers/project/helper.ts",
+          "lineno": 35
+        },
+        "hash": "ec812013a08c121eea0b096d5dc9feca260d61898bec243fc8ab4ab524bd29db",
+        "hash_v2": "2e162e0d2e424cff29aec31b2f07018e037ab3e87d32d72f4d6811189552ea89",
+        "stack": [
+          "src/server/api/routers/project/helper.ts:35"
+        ],
+        "scope": {
+          "event": "call",
+          "http_server_request": {
+            "path_info": "/api/trpc/:param",
+            "request_method": "POST",
+            "headers": {
+              "Host": "<v1>",
+              "Connection": "<v2>",
+              "Content-Type": "<v3>",
+              "X-Test-User-Id": "<uuid:v4>",
+              "X-Test-User-Email": "<v5>",
+              "Accept": "<v6>",
+              "Accept-Language": "<v7>",
+              "Sec-Fetch-Mode": "<v8>",
+              "User-Agent": "<v9>",
+              "Accept-Encoding": "<v10>",
+              "Content-Length": "<int:v11>"
+            },
+            "protocol": "HTTP/1.1"
+          },
+          "id": 1,
+          "thread_id": 0
+        },
+        "message": "helper.verifyProjectAccess provides authorization, but the request is not authenticated",
+        "relatedEvents": [
+          {
+            "event": "call",
+            "id": 2,
+            "thread_id": 0,
+            "method_id": "verifyProjectAccess",
+            "static": true,
+            "parameters": [
+              {
+                "class": "NodePgDatabase",
+                "value": "<v12>",
+                "object_id": 7,
+                "name": "db"
+              },
+              {
+                "class": "String",
+                "value": "<v13>",
+                "name": "userId"
+              },
+              {
+                "class": "String",
+                "value": "<v14>",
+                "name": "projectId"
+              }
+            ],
+            "defined_class": "helper",
+            "path": "src/server/api/routers/project/helper.ts",
+            "lineno": 35
+          },
+          {
+            "event": "call",
+            "http_server_request": {
+              "path_info": "/api/trpc/:param",
+              "request_method": "POST",
+              "headers": {
+                "Host": "<v1>",
+                "Connection": "<v2>",
+                "Content-Type": "<v3>",
+                "X-Test-User-Id": "<uuid:v4>",
+                "X-Test-User-Email": "<v5>",
+                "Accept": "<v6>",
+                "Accept-Language": "<v7>",
+                "Sec-Fetch-Mode": "<v8>",
+                "User-Agent": "<v9>",
+                "Accept-Encoding": "<v10>",
+                "Content-Length": "<int:v11>"
+              },
+              "protocol": "HTTP/1.1"
+            },
+            "id": 1,
+            "thread_id": 0
+          }
+        ],
+        "impactDomain": "Security",
+        "participatingEvents": {
+          "request": {
+            "event": "call",
+            "http_server_request": {
+              "path_info": "/api/trpc/:param",
+              "request_method": "POST",
+              "headers": {
+                "Host": "<v1>",
+                "Connection": "<v2>",
+                "Content-Type": "<v3>",
+                "X-Test-User-Id": "<uuid:v4>",
+                "X-Test-User-Email": "<v5>",
+                "Accept": "<v6>",
+                "Accept-Language": "<v7>",
+                "Sec-Fetch-Mode": "<v8>",
+                "User-Agent": "<v9>",
+                "Accept-Encoding": "<v10>",
+                "Content-Length": "<int:v11>"
+              },
+              "protocol": "HTTP/1.1"
+            },
+            "id": 1,
+            "thread_id": 0
+          }
+        }
+      },
+      {
+        "appMapFile": "vitest/project.addTag_called_by_the_owner.appmap.json",
+        "checkId": "authz-before-authn",
+        "ruleId": "authz-before-authn",
+        "ruleTitle": "Authorization performed before authentication",
+        "event": {
+          "event": "call",
+          "id": 2,
+          "thread_id": 0,
+          "method_id": "verifyProjectAccess",
+          "static": true,
+          "parameters": [
+            {
+              "class": "NodePgDatabase",
+              "value": "<v12>",
+              "object_id": 7,
+              "name": "db"
+            },
+            {
+              "class": "String",
+              "value": "<v13>",
+              "name": "userId"
+            },
+            {
+              "class": "String",
+              "value": "<v14>",
+              "name": "projectId"
+            }
+          ],
+          "defined_class": "helper",
+          "path": "src/server/api/routers/project/helper.ts",
+          "lineno": 35
+        },
+        "hash": "ec812013a08c121eea0b096d5dc9feca260d61898bec243fc8ab4ab524bd29db",
+        "hash_v2": "82aaa7425104a3e37520fce697e1c3db4b6ae1673c2a47f4cbfcd891bcddc022",
+        "stack": [
+          "src/server/api/routers/project/helper.ts:35"
+        ],
+        "scope": {
+          "event": "call",
+          "http_server_request": {
+            "path_info": "/api/trpc/:param",
+            "request_method": "POST",
+            "headers": {
+              "Host": "<v1>",
+              "Connection": "<v2>",
+              "Content-Type": "<v3>",
+              "X-Test-User-Id": "<uuid:v4>",
+              "X-Test-User-Email": "<v5>",
+              "Accept": "<v6>",
+              "Accept-Language": "<v7>",
+              "Sec-Fetch-Mode": "<v8>",
+              "User-Agent": "<v9>",
+              "Accept-Encoding": "<v10>",
+              "Content-Length": "<int:v11>"
+            },
+            "protocol": "HTTP/1.1"
+          },
+          "id": 1,
+          "thread_id": 0
+        },
+        "message": "helper.verifyProjectAccess provides authorization, but the request is not authenticated",
+        "relatedEvents": [
+          {
+            "event": "call",
+            "id": 2,
+            "thread_id": 0,
+            "method_id": "verifyProjectAccess",
+            "static": true,
+            "parameters": [
+              {
+                "class": "NodePgDatabase",
+                "value": "<v12>",
+                "object_id": 7,
+                "name": "db"
+              },
+              {
+                "class": "String",
+                "value": "<v13>",
+                "name": "userId"
+              },
+              {
+                "class": "String",
+                "value": "<v14>",
+                "name": "projectId"
+              }
+            ],
+            "defined_class": "helper",
+            "path": "src/server/api/routers/project/helper.ts",
+            "lineno": 35
+          },
+          {
+            "event": "call",
+            "http_server_request": {
+              "path_info": "/api/trpc/:param",
+              "request_method": "POST",
+              "headers": {
+                "Host": "<v1>",
+                "Connection": "<v2>",
+                "Content-Type": "<v3>",
+                "X-Test-User-Id": "<uuid:v4>",
+                "X-Test-User-Email": "<v5>",
+                "Accept": "<v6>",
+                "Accept-Language": "<v7>",
+                "Sec-Fetch-Mode": "<v8>",
+                "User-Agent": "<v9>",
+                "Accept-Encoding": "<v10>",
+                "Content-Length": "<int:v11>"
+              },
+              "protocol": "HTTP/1.1"
+            },
+            "id": 1,
+            "thread_id": 0
+          }
+        ],
+        "impactDomain": "Security",
+        "participatingEvents": {
+          "request": {
+            "event": "call",
+            "http_server_request": {
+              "path_info": "/api/trpc/:param",
+              "request_method": "POST",
+              "headers": {
+                "Host": "<v1>",
+                "Connection": "<v2>",
+                "Content-Type": "<v3>",
+                "X-Test-User-Id": "<uuid:v4>",
+                "X-Test-User-Email": "<v5>",
+                "Accept": "<v6>",
+                "Accept-Language": "<v7>",
+                "Sec-Fetch-Mode": "<v8>",
+                "User-Agent": "<v9>",
+                "Accept-Encoding": "<v10>",
+                "Content-Length": "<int:v11>"
+              },
+              "protocol": "HTTP/1.1"
+            },
+            "id": 1,
+            "thread_id": 0
+          }
+        }
+      },
+      {
+        "appMapFile": "vitest/project.captureScreenshot_called_by_a_non-member.appmap.json",
+        "checkId": "authz-before-authn",
+        "ruleId": "authz-before-authn",
+        "ruleTitle": "Authorization performed before authentication",
+        "event": {
+          "event": "call",
+          "id": 2,
+          "thread_id": 0,
+          "method_id": "verifyProjectAccess",
+          "static": true,
+          "parameters": [
+            {
+              "class": "NodePgDatabase",
+              "value": "<v12>",
+              "object_id": 7,
+              "name": "db"
+            },
+            {
+              "class": "String",
+              "value": "<v13>",
+              "name": "userId"
+            },
+            {
+              "class": "String",
+              "value": "<v14>",
+              "name": "projectId"
+            }
+          ],
+          "defined_class": "helper",
+          "path": "src/server/api/routers/project/helper.ts",
+          "lineno": 35
+        },
+        "hash": "ec812013a08c121eea0b096d5dc9feca260d61898bec243fc8ab4ab524bd29db",
+        "hash_v2": "f9625603e89ea4e2c9ea22e4537091b072994dc83b2207e93443fcc82b64622e",
+        "stack": [
+          "src/server/api/routers/project/helper.ts:35"
+        ],
+        "scope": {
+          "event": "call",
+          "http_server_request": {
+            "path_info": "/api/trpc/:param",
+            "request_method": "POST",
+            "headers": {
+              "Host": "<v1>",
+              "Connection": "<v2>",
+              "Content-Type": "<v3>",
+              "X-Test-User-Id": "<uuid:v4>",
+              "X-Test-User-Email": "<v5>",
+              "Accept": "<v6>",
+              "Accept-Language": "<v7>",
+              "Sec-Fetch-Mode": "<v8>",
+              "User-Agent": "<v9>",
+              "Accept-Encoding": "<v10>",
+              "Content-Length": "<int:v11>"
+            },
+            "protocol": "HTTP/1.1"
+          },
+          "id": 1,
+          "thread_id": 0
+        },
+        "message": "helper.verifyProjectAccess provides authorization, but the request is not authenticated",
+        "relatedEvents": [
+          {
+            "event": "call",
+            "id": 2,
+            "thread_id": 0,
+            "method_id": "verifyProjectAccess",
+            "static": true,
+            "parameters": [
+              {
+                "class": "NodePgDatabase",
+                "value": "<v12>",
+                "object_id": 7,
+                "name": "db"
+              },
+              {
+                "class": "String",
+                "value": "<v13>",
+                "name": "userId"
+              },
+              {
+                "class": "String",
+                "value": "<v14>",
+                "name": "projectId"
+              }
+            ],
+            "defined_class": "helper",
+            "path": "src/server/api/routers/project/helper.ts",
+            "lineno": 35
+          },
+          {
+            "event": "call",
+            "http_server_request": {
+              "path_info": "/api/trpc/:param",
+              "request_method": "POST",
+              "headers": {
+                "Host": "<v1>",
+                "Connection": "<v2>",
+                "Content-Type": "<v3>",
+                "X-Test-User-Id": "<uuid:v4>",
+                "X-Test-User-Email": "<v5>",
+                "Accept": "<v6>",
+                "Accept-Language": "<v7>",
+                "Sec-Fetch-Mode": "<v8>",
+                "User-Agent": "<v9>",
+                "Accept-Encoding": "<v10>",
+                "Content-Length": "<int:v11>"
+              },
+              "protocol": "HTTP/1.1"
+            },
+            "id": 1,
+            "thread_id": 0
+          }
+        ],
+        "impactDomain": "Security",
+        "participatingEvents": {
+          "request": {
+            "event": "call",
+            "http_server_request": {
+              "path_info": "/api/trpc/:param",
+              "request_method": "POST",
+              "headers": {
+                "Host": "<v1>",
+                "Connection": "<v2>",
+                "Content-Type": "<v3>",
+                "X-Test-User-Id": "<uuid:v4>",
+                "X-Test-User-Email": "<v5>",
+                "Accept": "<v6>",
+                "Accept-Language": "<v7>",
+                "Sec-Fetch-Mode": "<v8>",
+                "User-Agent": "<v9>",
+                "Accept-Encoding": "<v10>",
+                "Content-Length": "<int:v11>"
+              },
+              "protocol": "HTTP/1.1"
+            },
+            "id": 1,
+            "thread_id": 0
+          }
+        }
+      },
+      {
+        "appMapFile": "vitest/project.update_called_by_the_owner.appmap.json",
+        "checkId": "authz-before-authn",
+        "ruleId": "authz-before-authn",
+        "ruleTitle": "Authorization performed before authentication",
+        "event": {
+          "event": "call",
+          "id": 2,
+          "thread_id": 0,
+          "method_id": "verifyProjectAccess",
+          "static": true,
+          "parameters": [
+            {
+              "class": "NodePgDatabase",
+              "value": "<v12>",
+              "object_id": 7,
+              "name": "db"
+            },
+            {
+              "class": "String",
+              "value": "<v13>",
+              "name": "userId"
+            },
+            {
+              "class": "String",
+              "value": "<v14>",
+              "name": "projectId"
+            }
+          ],
+          "defined_class": "helper",
+          "path": "src/server/api/routers/project/helper.ts",
+          "lineno": 35
+        },
+        "hash": "ec812013a08c121eea0b096d5dc9feca260d61898bec243fc8ab4ab524bd29db",
+        "hash_v2": "74292ee13d764ca6e1a4791fc9112124582b272794fc0fcdfeb9e817096c4d0f",
+        "stack": [
+          "src/server/api/routers/project/helper.ts:35"
+        ],
+        "scope": {
+          "event": "call",
+          "http_server_request": {
+            "path_info": "/api/trpc/:param",
+            "request_method": "POST",
+            "headers": {
+              "Host": "<v1>",
+              "Connection": "<v2>",
+              "Content-Type": "<v3>",
+              "X-Test-User-Id": "<uuid:v4>",
+              "X-Test-User-Email": "<v5>",
+              "Accept": "<v6>",
+              "Accept-Language": "<v7>",
+              "Sec-Fetch-Mode": "<v8>",
+              "User-Agent": "<v9>",
+              "Accept-Encoding": "<v10>",
+              "Content-Length": "<int:v11>"
+            },
+            "protocol": "HTTP/1.1"
+          },
+          "id": 1,
+          "thread_id": 0
+        },
+        "message": "helper.verifyProjectAccess provides authorization, but the request is not authenticated",
+        "relatedEvents": [
+          {
+            "event": "call",
+            "id": 2,
+            "thread_id": 0,
+            "method_id": "verifyProjectAccess",
+            "static": true,
+            "parameters": [
+              {
+                "class": "NodePgDatabase",
+                "value": "<v12>",
+                "object_id": 7,
+                "name": "db"
+              },
+              {
+                "class": "String",
+                "value": "<v13>",
+                "name": "userId"
+              },
+              {
+                "class": "String",
+                "value": "<v14>",
+                "name": "projectId"
+              }
+            ],
+            "defined_class": "helper",
+            "path": "src/server/api/routers/project/helper.ts",
+            "lineno": 35
+          },
+          {
+            "event": "call",
+            "http_server_request": {
+              "path_info": "/api/trpc/:param",
+              "request_method": "POST",
+              "headers": {
+                "Host": "<v1>",
+                "Connection": "<v2>",
+                "Content-Type": "<v3>",
+                "X-Test-User-Id": "<uuid:v4>",
+                "X-Test-User-Email": "<v5>",
+                "Accept": "<v6>",
+                "Accept-Language": "<v7>",
+                "Sec-Fetch-Mode": "<v8>",
+                "User-Agent": "<v9>",
+                "Accept-Encoding": "<v10>",
+                "Content-Length": "<int:v11>"
+              },
+              "protocol": "HTTP/1.1"
+            },
+            "id": 1,
+            "thread_id": 0
+          }
+        ],
+        "impactDomain": "Security",
+        "participatingEvents": {
+          "request": {
+            "event": "call",
+            "http_server_request": {
+              "path_info": "/api/trpc/:param",
+              "request_method": "POST",
+              "headers": {
+                "Host": "<v1>",
+                "Connection": "<v2>",
+                "Content-Type": "<v3>",
+                "X-Test-User-Id": "<uuid:v4>",
+                "X-Test-User-Email": "<v5>",
+                "Accept": "<v6>",
+                "Accept-Language": "<v7>",
+                "Sec-Fetch-Mode": "<v8>",
+                "User-Agent": "<v9>",
+                "Accept-Encoding": "<v10>",
+                "Content-Length": "<int:v11>"
+              },
+              "protocol": "HTTP/1.1"
+            },
+            "id": 1,
+            "thread_id": 0
+          }
+        }
+      }
+    ],
+    "resolved": []
+  },
+  "sqlDiff": {
+    "newQueries": [
+      {
+        "query": "rollback",
+        "appmaps": [
+          "vitest/project.delete_called_by_a_non-member"
+        ],
+        "sourceLocations": []
+      },
+      {
+        "query": "select \"projects\".\"id\", \"projects\".\"name\", \"projects\".\"description\", \"projects\".\"tags\", \"projects\".\"created_at\", \"projects\".\"updated_at\", \"projects\".\"preview_img_url\", \"projects\".\"preview_img_path\", \"projects\".\"preview_img_bucket\", \"projects\".\"updated_preview_img_at\", \"projects\".\"sandbox_id\", \"projects\".\"sandbox_url\", \"projects_userProjects\".\"data\" as \"userProjects\" from \"projects\" \"projects\" left join lateral (select coalesce(json_agg(json_build_array(\"projects_userProjects\".\"user_id\", \"projects_userProjects\".\"project_id\", \"projects_userProjects\".\"created_at\", \"projects_userProjects\".\"role\")), ?::json) as \"data\" from \"user_projects\" \"projects_userProjects\" where (\"projects_userProjects\".\"project_id\" = \"projects\".\"id\" and \"projects_userProjects\".\"user_id\" = ?",
+        "appmaps": [
+          "vitest/project.delete_called_by_a_non-member",
+          "vitest/project.delete_called_by_the_owner",
+          "vitest/project.update_called_by_a_non-member",
+          "vitest/project.update_called_by_the_owner"
+        ],
+        "sourceLocations": []
+      }
+    ],
+    "removedQueries": [],
+    "newTables": [],
+    "removedTables": []
+  },
+  "apiDiff": {
+    "breakingDifferencesFound": false,
+    "nonBreakingDifferences": [],
+    "unclassifiedDifferences": []
+  }
+}

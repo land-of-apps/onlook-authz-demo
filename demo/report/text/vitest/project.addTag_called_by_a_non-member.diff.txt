@@ -1,0 +1,4 @@
+changed HTTP server request `POST /api/trpc/:param` to return 500 instead of 200
+  removed SQL `select "id", "name", "description", "tags", "created_at", "updated_at", "preview_img_url", "preview_img_path", "preview_img_bucket", "updated_preview_img_at", "sandbox_id", "sandbox_url" from "projects" "projects" where "projects"."id" = $? limit $?`
+  removed SQL `update "projects" set "tags" = $?, "updated_at" = $? where "projects"."id" = $?`
+  added function call `project.verifyProjectAccess`

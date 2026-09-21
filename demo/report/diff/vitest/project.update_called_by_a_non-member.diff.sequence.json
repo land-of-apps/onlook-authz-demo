@@ -1,0 +1,124 @@
+{
+  "actors": [
+    {
+      "id": "http:HTTP server requests",
+      "name": "HTTP server requests",
+      "order": 0
+    },
+    {
+      "id": "package:project",
+      "name": "project",
+      "order": 1000
+    },
+    {
+      "id": "database:Database",
+      "name": "Database",
+      "order": 4000
+    }
+  ],
+  "rootActions": [
+    {
+      "nodeType": 4,
+      "callee": "http:HTTP server requests",
+      "route": "POST /api/trpc/:param",
+      "status": 500,
+      "digest": "ea33f6b780ec414a14bbf7f4cff3e19df8c355208022bc3ff18d678bcdc43ac3",
+      "subtreeDigest": "unknown",
+      "children": [
+        {
+          "nodeType": 6,
+          "caller": "http:HTTP server requests",
+          "callee": "database:Database",
+          "query": "update \"projects\" set \"id\" = $?, \"name\" = $?, \"updated_at\" = $? where \"projects\".\"id\" = $? returning \"id\", \"name\", \"description\", \"tags\", \"created_at\", \"updated_at\", \"preview_img_url\", \"preview_img_path\", \"preview_img_bucket\", \"updated_preview_img_at\", \"sandbox_id\", \"sandbox_url\"",
+          "digest": "delete:ee103fd0e85eab7381e88680df69bf6771fedfcdab68ed80bba502308bcc5ecb",
+          "subtreeDigest": "unknown",
+          "children": [],
+          "elapsed": 0.0002183259930461645,
+          "eventIds": [
+            2
+          ],
+          "diffMode": 2
+        },
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:project",
+          "name": "verifyProjectAccess",
+          "static": true,
+          "digest": "251bb6df3934870922aaa214d100160259f74295f9115e7a962c95488c114d21",
+          "subtreeDigest": "unknown",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "project/helper.verifyProjectAccess",
+            "raises_exception": true
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "Promise"
+            },
+            "raisesException": true
+          },
+          "children": [
+            {
+              "nodeType": 6,
+              "caller": "package:project",
+              "callee": "database:Database",
+              "query": "select \"projects\".\"id\", \"projects\".\"name\", \"projects\".\"description\", \"projects\".\"tags\", \"projects\".\"created_at\", \"projects\".\"updated_at\", \"projects\".\"preview_img_url\", \"projects\".\"preview_img_path\", \"projects\".\"preview_img_bucket\", \"projects\".\"updated_preview_img_at\", \"projects\".\"sandbox_id\", \"projects\".\"sandbox_url\", \"projects_userProjects\".\"data\" as \"userProjects\" from \"projects\" \"projects\" left join lateral (select coalesce(json_agg(json_build_array(\"projects_userProjects\".\"user_id\", \"projects_userProjects\".\"project_id\", \"projects_userProjects\".\"created_at\", \"projects_userProjects\".\"role\")), ?::json) as \"data\" from \"user_projects\" \"projects_userProjects\" where (\"projects_userProjects\".\"project_id\" = \"projects\".\"id\" and \"projects_userProjects\".\"user_id\" = $?)) \"projects_userProjects\" on ? where \"projects\".\"id\" = $? limit $?",
+              "digest": "02163ab161ffd473a17abd4450de9c2b7018014b819d6717125b3a9d38fffb4f",
+              "subtreeDigest": "unknown",
+              "children": [],
+              "elapsed": 0.0003163281362503767,
+              "eventIds": [
+                3
+              ],
+              "diffMode": 1
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:project",
+              "callee": "package:project",
+              "name": "fromDbPreviewImg",
+              "static": true,
+              "digest": "delete:c27cd571826be62697fb389f575283c300bc14cd9a5eddf3d9d3eadecd94ab2f",
+              "subtreeDigest": "unknown",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "project/project.fromDbPreviewImg",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "object"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.000003686174750328064,
+              "eventIds": [
+                5
+              ],
+              "diffMode": 2
+            }
+          ],
+          "elapsed": 0.0024678579065948725,
+          "eventIds": [
+            2
+          ],
+          "labels": [
+            "security.authorization"
+          ],
+          "diffMode": 3,
+          "formerName": "fromDbProject",
+          "formerResult": "Object"
+        }
+      ],
+      "elapsed": 0.3617881741374731,
+      "eventIds": [
+        1
+      ],
+      "diffMode": 3,
+      "formerName": "POST /api/trpc/:param",
+      "formerResult": "200"
+    }
+  ]
+}

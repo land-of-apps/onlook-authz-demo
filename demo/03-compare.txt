@@ -1,0 +1,54 @@
+Archiving base (18 AppMap(s))...
+Archiving head (18 AppMap(s))...
+Comparing...
+Base: appmap-base = 5b03ba69 appmap: recording config, tests and gold traces on base (18 gold traces)
+Head: appmap-head = 0f3dfb5a appmap: recording config, tests and gold traces on head (18 gold traces)
+
+Traces: 9 changed, 0 new, 0 removed.
+  changed  vitest/project.addTag_called_by_a_non-member
+           4 of 4 nodes: 1 added, 2 removed, 1 changed, 0 moved  (diff/vitest/project.addTag_called_by_a_non-member.diff.sequence.json)
+           labels:  security.authorization
+           text:    text/vitest/project.addTag_called_by_a_non-member.diff.txt
+  changed  vitest/project.addTag_called_by_the_owner
+           1 of 4 nodes: 1 added, 0 removed, 0 changed, 0 moved  (diff/vitest/project.addTag_called_by_the_owner.diff.sequence.json)
+           labels:  security.authorization
+           text:    text/vitest/project.addTag_called_by_the_owner.diff.txt
+  changed  vitest/project.captureScreenshot_called_by_a_non-member
+           1 of 2 nodes: 1 added, 0 removed, 0 changed, 0 moved  (diff/vitest/project.captureScreenshot_called_by_a_non-member.diff.sequence.json)
+           labels:  security.authorization
+           text:    text/vitest/project.captureScreenshot_called_by_a_non-member.diff.txt
+  changed  vitest/project.delete_called_by_a_non-member
+           6 of 7 nodes: 2 added, 2 removed, 2 changed, 0 moved  (diff/vitest/project.delete_called_by_a_non-member.diff.sequence.json)
+           labels:  security.authorization
+           text:    text/vitest/project.delete_called_by_a_non-member.diff.txt
+  changed  vitest/project.delete_called_by_the_owner
+           3 of 7 nodes: 2 added, 0 removed, 0 changed, 1 moved  (diff/vitest/project.delete_called_by_the_owner.diff.sequence.json)
+           moved:   delete from "user_projects" where "user_projects"."project_id" = $? reordered within POST /api/trpc/:param
+           labels:  security.authorization
+           text:    text/vitest/project.delete_called_by_the_owner.diff.txt
+  changed  vitest/project.removeTag_called_by_a_non-member
+           4 of 4 nodes: 1 added, 2 removed, 1 changed, 0 moved  (diff/vitest/project.removeTag_called_by_a_non-member.diff.sequence.json)
+           labels:  security.authorization
+           text:    text/vitest/project.removeTag_called_by_a_non-member.diff.txt
+  changed  vitest/project.update_called_by_a_non-member
+           5 of 5 nodes: 1 added, 2 removed, 2 changed, 0 moved  (diff/vitest/project.update_called_by_a_non-member.diff.sequence.json)
+           labels:  security.authorization
+           text:    text/vitest/project.update_called_by_a_non-member.diff.txt
+  changed  vitest/project.update_called_by_the_owner
+           6 of 8 nodes: 4 added, 2 removed, 0 changed, 0 moved  (diff/vitest/project.update_called_by_the_owner.diff.sequence.json)
+           labels:  security.authorization
+           text:    text/vitest/project.update_called_by_the_owner.diff.txt
+  changed  vitest/project.update_of_a_project_that_does_not_exist
+           2 of 3 nodes: 1 added, 1 removed, 0 changed, 0 moved  (diff/vitest/project.update_of_a_project_that_does_not_exist.diff.sequence.json)
+           labels:  security.authorization
+           text:    text/vitest/project.update_of_a_project_that_does_not_exist.diff.txt
+SQL: 2 new queries, 0 removed.
+API: no breaking change, 0 other difference(s).
+Scanner findings: 4 new, 0 resolved.
+
+Command:       node ~/.claude/skills/appmap-review/assets/review.mjs compare --base appmap-base --head appmap-head --dir apps/web/client/gold_traces
+Run in:        head
+Change report: demo/report/change-report.json
+Diff diagrams: demo/report/diff
+Diff text:     demo/report/text
+Source diff:   git diff 5b03ba69..0f3dfb5a

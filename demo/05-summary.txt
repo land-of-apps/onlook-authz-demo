@@ -1,0 +1,24 @@
+member.remove_called_by_a_non-member
+   base: 200 | no check | delete from user_projects
+   head: 200 | no check | delete from user_projects
+project.addTag_called_by_a_non-member
+   base: 200 | no check | select id, name,; update projects set
+   head: 500 | check ran | select projects.id, projects.name,
+project.captureScreenshot_called_by_a_non-member
+   base: 200 | no check | no SQL
+   head: 200 | check ran | select projects.id, projects.name,
+project.delete_called_by_a_non-member
+   base: 200 | no check | begin; delete from projects; delete from user_projects; commit
+   head: 500 | check ran | begin; select projects.id, projects.name,; rollback
+project.get_called_by_a_non-member
+   base: 200 | no check | select id, name,
+   head: 200 | no check | select id, name,
+project.removeTag_called_by_a_non-member
+   base: 200 | no check | select id, name,; update projects set
+   head: 500 | check ran | select projects.id, projects.name,
+project.update_called_by_a_non-member
+   base: 200 | no check | update projects set
+   head: 500 | check ran | select projects.id, projects.name,
+settings.upsert_called_by_a_non-member
+   base: 200 | no check | insert into project_settings
+   head: 200 | no check | insert into project_settings

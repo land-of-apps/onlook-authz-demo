@@ -1,0 +1,24 @@
+ [32m✓[39m [30m[42m server [49m[39m test/server/project.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 3941[2mms[22m[39m
+     [33m[2m✓[22m[39m project.list called by the owner [33m 605[2mms[22m[39m
+     [33m[2m✓[22m[39m project.get called by the owner [33m 437[2mms[22m[39m
+     [33m[2m✓[22m[39m project.update called by the owner [33m 332[2mms[22m[39m
+     [33m[2m✓[22m[39m project.get without signing in [33m 357[2mms[22m[39m
+     [33m[2m✓[22m[39m project.get called by a non-member [33m 369[2mms[22m[39m
+     [33m[2m✓[22m[39m project.delete called by a non-member [33m 389[2mms[22m[39m
+     [33m[2m✓[22m[39m project.removeTag called by a non-member [33m 341[2mms[22m[39m
+(Λ) Wrote 13 AppMaps to base/apps/web/client/tmp/appmap/vitest/
+ [32m✓[39m [30m[42m server [49m[39m test/server/settings.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 579[2mms[22m[39m
+(Λ) Wrote 2 AppMaps to base/apps/web/client/tmp/appmap/vitest/
+ [32m✓[39m [30m[42m server [49m[39m test/server/member.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 1118[2mms[22m[39m
+     [33m[2m✓[22m[39m member.list called by the owner [33m 624[2mms[22m[39m
+     [33m[2m✓[22m[39m member.remove called by a non-member [33m 485[2mms[22m[39m
+(Λ) Wrote 2 AppMaps to base/apps/web/client/tmp/appmap/vitest/
+ [32m✓[39m [30m[42m server [49m[39m test/server/branch.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 305[2mms[22m[39m
+ [32m✓[39m [30m[42m server [49m[39m test/server/project.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 4890[2mms[22m[39m
+     [33m[2m✓[22m[39m project.list called by the owner [33m 479[2mms[22m[39m
+     [33m[2m✓[22m[39m project.get called by the owner [33m 351[2mms[22m[39m
+     [33m[2m✓[22m[39m project.update called by the owner [33m 304[2mms[22m[39m
+     [33m[2m✓[22m[39m project.delete called by the owner [33m 329[2mms[22m[39m
+     [33m[2m✓[22m[39m project.get without signing in [33m 497[2mms[22m[39m
+     [33m[2m✓[22m[39m project.get called by a non-member [33m 481[2mms[22m[39m
+     [33m[2m✓[22m[39m project.update called by a non-member [33m 372[2mms[22m[39m

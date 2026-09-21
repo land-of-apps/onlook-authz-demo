@@ -1,0 +1,36 @@
+# AppMap recording config for the web client's server side: the tRPC API.
+# Recordings are made under Node with vitest, in front of the recorder:
+#   npx appmap-node npx vitest run --config vitest.server.config.ts
+# The record commands live in gold_traces/manifest.yaml.
+#
+# Depth. The application's own server code is recorded in full: the tRPC routers
+# and their helpers (src/server) and the shared database package (drizzle schema
+# and row mappers). HTTP requests and SQL statements are captured by the
+# recorder's built-in hooks for node:http and pg, so every trace shows the
+# request that came in, the functions that ran, and the SQL those functions
+# issued. Frameworks (tRPC, drizzle, zod) are not listed: they decide nothing
+# about who may do what, and their internals would only add repetition.
+name: onlook-web-client
+language: javascript
+appmap_dir: tmp/appmap
+packages:
+  # The tRPC routers, procedures and helpers: the code that decides what a request may do.
+  - path: src/server
+    exclude:
+      - node_modules
+      - .yarn
+    # Labels for the decisions. The procedure handlers and the sign-in middleware
+    # in trpc.ts are anonymous functions, which the recorder cannot label, so
+    # the one named decision is the project membership check.
+    functions:
+      - names: [verifyProjectAccess]
+        labels: [security.authorization]
+  # The shared database package: drizzle schema and the row-to-model mappers.
+  - path: ../../../packages/db/src
+    exclude:
+      - node_modules
+      - .yarn
+    # Noise check (appmap stats on the largest recordings, 1.5 to 6.3 KB each):
+    # the most called function in any trace runs once. Nothing is excluded.
+    # The test harness (test/server/support) is not listed in packages, so its
+    # fixture writes and read-backs never enter a trace.

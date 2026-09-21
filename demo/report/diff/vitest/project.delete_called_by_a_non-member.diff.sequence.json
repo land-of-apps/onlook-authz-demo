@@ -1,0 +1,139 @@
+{
+  "actors": [
+    {
+      "id": "http:HTTP server requests",
+      "name": "HTTP server requests",
+      "order": 0
+    },
+    {
+      "id": "package:project",
+      "name": "project",
+      "order": 1000
+    },
+    {
+      "id": "database:Database",
+      "name": "Database",
+      "order": 4000
+    }
+  ],
+  "rootActions": [
+    {
+      "nodeType": 4,
+      "callee": "http:HTTP server requests",
+      "route": "POST /api/trpc/:param",
+      "status": 500,
+      "digest": "ea33f6b780ec414a14bbf7f4cff3e19df8c355208022bc3ff18d678bcdc43ac3",
+      "subtreeDigest": "unknown",
+      "children": [
+        {
+          "nodeType": 6,
+          "caller": "http:HTTP server requests",
+          "callee": "database:Database",
+          "query": "begin",
+          "digest": "a837869ea3eec93baf679bf3bcd19a57204f99bafd58814b1d74682ae25c5c53",
+          "subtreeDigest": "unknown",
+          "children": [],
+          "elapsed": 0.000370213994756341,
+          "eventIds": [
+            2
+          ]
+        },
+        {
+          "nodeType": 6,
+          "caller": "http:HTTP server requests",
+          "callee": "database:Database",
+          "query": "delete from \"projects\" where \"projects\".\"id\" = $?",
+          "digest": "delete:f2fd3d53336d3d006da402d49fa31604799649fcf09fb5c5c5b58d6f67d945e9",
+          "subtreeDigest": "unknown",
+          "children": [],
+          "elapsed": 0.0009071591775864363,
+          "eventIds": [
+            4
+          ],
+          "diffMode": 2
+        },
+        {
+          "nodeType": 6,
+          "caller": "http:HTTP server requests",
+          "callee": "database:Database",
+          "query": "delete from \"user_projects\" where \"user_projects\".\"project_id\" = $?",
+          "digest": "delete:a909f210018d07be3de060588043f604354865d26ca9fbeda7bb4f1196689fbb",
+          "subtreeDigest": "unknown",
+          "children": [],
+          "elapsed": 0.0004801871255040169,
+          "eventIds": [
+            6
+          ],
+          "diffMode": 2
+        },
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:project",
+          "name": "verifyProjectAccess",
+          "static": true,
+          "digest": "251bb6df3934870922aaa214d100160259f74295f9115e7a962c95488c114d21",
+          "subtreeDigest": "unknown",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "project/helper.verifyProjectAccess",
+            "raises_exception": true
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "Promise"
+            },
+            "raisesException": true
+          },
+          "children": [
+            {
+              "nodeType": 6,
+              "caller": "package:project",
+              "callee": "database:Database",
+              "query": "select \"projects\".\"id\", \"projects\".\"name\", \"projects\".\"description\", \"projects\".\"tags\", \"projects\".\"created_at\", \"projects\".\"updated_at\", \"projects\".\"preview_img_url\", \"projects\".\"preview_img_path\", \"projects\".\"preview_img_bucket\", \"projects\".\"updated_preview_img_at\", \"projects\".\"sandbox_id\", \"projects\".\"sandbox_url\", \"projects_userProjects\".\"data\" as \"userProjects\" from \"projects\" \"projects\" left join lateral (select coalesce(json_agg(json_build_array(\"projects_userProjects\".\"user_id\", \"projects_userProjects\".\"project_id\", \"projects_userProjects\".\"created_at\", \"projects_userProjects\".\"role\")), ?::json) as \"data\" from \"user_projects\" \"projects_userProjects\" where (\"projects_userProjects\".\"project_id\" = \"projects\".\"id\" and \"projects_userProjects\".\"user_id\" = $?)) \"projects_userProjects\" on ? where \"projects\".\"id\" = $? limit $?",
+              "digest": "02163ab161ffd473a17abd4450de9c2b7018014b819d6717125b3a9d38fffb4f",
+              "subtreeDigest": "unknown",
+              "children": [],
+              "elapsed": 0.0011565140448510647,
+              "eventIds": [
+                5
+              ],
+              "diffMode": 1
+            }
+          ],
+          "elapsed": 0.0019239659886807203,
+          "eventIds": [
+            4
+          ],
+          "labels": [
+            "security.authorization"
+          ],
+          "diffMode": 1
+        },
+        {
+          "nodeType": 6,
+          "caller": "http:HTTP server requests",
+          "callee": "database:Database",
+          "query": "rollback",
+          "digest": "c25f313099f39b61256e62b3c06095337f86af3e57d02a9e570db7412687ab65",
+          "subtreeDigest": "unknown",
+          "children": [],
+          "elapsed": 0.000274997903034091,
+          "eventIds": [
+            8
+          ],
+          "diffMode": 3,
+          "formerName": "commit",
+          "formerResult": "void"
+        }
+      ],
+      "elapsed": 0.11655581905506551,
+      "eventIds": [
+        1
+      ],
+      "diffMode": 3,
+      "formerName": "POST /api/trpc/:param",
+      "formerResult": "200"
+    }
+  ]
+}

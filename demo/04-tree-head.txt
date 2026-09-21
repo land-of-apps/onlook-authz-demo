@@ -1,0 +1,6 @@
+HTTP→  POST /api/trpc/:param → HTTP 500 [177ms]
+  SQL    begin [0ms]
+  CALL   project/helper.verifyProjectAccess [1ms]  → <v17>
+  EXC    Error: <v18>
+    SQL    select "projects"."id", "projects"."name", "projects"."description", "projects"."tags", "projects"."created_at", "proje… [1ms]
+  SQL    rollback [1ms]

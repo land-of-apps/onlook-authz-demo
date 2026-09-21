@@ -1,0 +1,90 @@
+{
+  "actors": [
+    {
+      "id": "http:HTTP server requests",
+      "name": "HTTP server requests",
+      "order": 0
+    },
+    {
+      "id": "package:project",
+      "name": "project",
+      "order": 1000
+    },
+    {
+      "id": "database:Database",
+      "name": "Database",
+      "order": 4000
+    }
+  ],
+  "rootActions": [
+    {
+      "nodeType": 4,
+      "callee": "http:HTTP server requests",
+      "route": "POST /api/trpc/:param",
+      "status": 200,
+      "digest": "290b12ecd35abea8a0c2d04cf4c78ec0a870cc57ba571f5d5bc5939539922ea8",
+      "subtreeDigest": "unknown",
+      "children": [
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:project",
+          "name": "verifyProjectAccess",
+          "static": true,
+          "digest": "98cabef5f827845c32671765b2c073c77876b409438e98a7138e69b956d2a29c",
+          "subtreeDigest": "unknown",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "project/helper.verifyProjectAccess",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "Promise<undefined>"
+            },
+            "raisesException": false
+          },
+          "children": [],
+          "elapsed": 0.001512268092483282,
+          "eventIds": [
+            2
+          ],
+          "labels": [
+            "security.authorization"
+          ],
+          "diffMode": 1
+        },
+        {
+          "nodeType": 6,
+          "caller": "http:HTTP server requests",
+          "callee": "database:Database",
+          "query": "select \"id\", \"name\", \"description\", \"tags\", \"created_at\", \"updated_at\", \"preview_img_url\", \"preview_img_path\", \"preview_img_bucket\", \"updated_preview_img_at\", \"sandbox_id\", \"sandbox_url\" from \"projects\" \"projects\" where \"projects\".\"id\" = $? limit $?",
+          "digest": "981a20afdd2376acea3df1f6150aa2d70e4c2a5dadbec99b015568dc0e0fbadf",
+          "subtreeDigest": "unknown",
+          "children": [],
+          "elapsed": 0.00006705895066261292,
+          "eventIds": [
+            4
+          ]
+        },
+        {
+          "nodeType": 6,
+          "caller": "http:HTTP server requests",
+          "callee": "database:Database",
+          "query": "update \"projects\" set \"tags\" = $?, \"updated_at\" = $? where \"projects\".\"id\" = $?",
+          "digest": "13599c4c23c1cec2ccecdca26417176186017d29fa4fed142647e380759a1e8e",
+          "subtreeDigest": "unknown",
+          "children": [],
+          "elapsed": 0.00009413505904376507,
+          "eventIds": [
+            6
+          ]
+        }
+      ],
+      "elapsed": 0.16904121916741133,
+      "eventIds": [
+        1
+      ]
+    }
+  ]
+}

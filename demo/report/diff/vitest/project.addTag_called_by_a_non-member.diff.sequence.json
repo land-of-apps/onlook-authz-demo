@@ -1,0 +1,95 @@
+{
+  "actors": [
+    {
+      "id": "http:HTTP server requests",
+      "name": "HTTP server requests",
+      "order": 0
+    },
+    {
+      "id": "package:project",
+      "name": "project",
+      "order": 1000
+    },
+    {
+      "id": "database:Database",
+      "name": "Database",
+      "order": 3000
+    }
+  ],
+  "rootActions": [
+    {
+      "nodeType": 4,
+      "callee": "http:HTTP server requests",
+      "route": "POST /api/trpc/:param",
+      "status": 500,
+      "digest": "ea33f6b780ec414a14bbf7f4cff3e19df8c355208022bc3ff18d678bcdc43ac3",
+      "subtreeDigest": "unknown",
+      "children": [
+        {
+          "nodeType": 6,
+          "caller": "http:HTTP server requests",
+          "callee": "database:Database",
+          "query": "select \"id\", \"name\", \"description\", \"tags\", \"created_at\", \"updated_at\", \"preview_img_url\", \"preview_img_path\", \"preview_img_bucket\", \"updated_preview_img_at\", \"sandbox_id\", \"sandbox_url\" from \"projects\" \"projects\" where \"projects\".\"id\" = $? limit $?",
+          "digest": "delete:981a20afdd2376acea3df1f6150aa2d70e4c2a5dadbec99b015568dc0e0fbadf",
+          "subtreeDigest": "unknown",
+          "children": [],
+          "elapsed": 0.00019020913168787956,
+          "eventIds": [
+            2
+          ],
+          "diffMode": 2
+        },
+        {
+          "nodeType": 6,
+          "caller": "http:HTTP server requests",
+          "callee": "database:Database",
+          "query": "update \"projects\" set \"tags\" = $?, \"updated_at\" = $? where \"projects\".\"id\" = $?",
+          "digest": "delete:13599c4c23c1cec2ccecdca26417176186017d29fa4fed142647e380759a1e8e",
+          "subtreeDigest": "unknown",
+          "children": [],
+          "elapsed": 0.00009346380829811096,
+          "eventIds": [
+            4
+          ],
+          "diffMode": 2
+        },
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:project",
+          "name": "verifyProjectAccess",
+          "static": true,
+          "digest": "251bb6df3934870922aaa214d100160259f74295f9115e7a962c95488c114d21",
+          "subtreeDigest": "unknown",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "project/helper.verifyProjectAccess",
+            "raises_exception": true
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "Promise"
+            },
+            "raisesException": true
+          },
+          "children": [],
+          "elapsed": 0.0019801841117441654,
+          "eventIds": [
+            2
+          ],
+          "labels": [
+            "security.authorization"
+          ],
+          "diffMode": 1
+        }
+      ],
+      "elapsed": 0.3462187449913472,
+      "eventIds": [
+        1
+      ],
+      "diffMode": 3,
+      "formerName": "POST /api/trpc/:param",
+      "formerResult": "200"
+    }
+  ]
+}

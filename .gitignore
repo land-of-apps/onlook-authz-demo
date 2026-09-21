@@ -1,0 +1,14 @@
+# Built by setup.sh. Nothing here is needed to watch the demo.
+/work/
+/base/
+/head/
+/pgdata/
+/pgdata.log
+
+# `appmap index` writes an index folder next to each recording. Rebuilt in seconds.
+/recordings/*/*/
+
+# Editors and scratch
+.DS_Store
+.vscode/
+*.log

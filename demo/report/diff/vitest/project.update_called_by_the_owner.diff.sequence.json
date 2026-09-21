@@ -1,0 +1,218 @@
+{
+  "actors": [
+    {
+      "id": "http:HTTP server requests",
+      "name": "HTTP server requests",
+      "order": 0
+    },
+    {
+      "id": "package:src/server/api/routers/project",
+      "name": "project",
+      "order": 1000
+    },
+    {
+      "id": "package:project",
+      "name": "project",
+      "order": 1000
+    },
+    {
+      "id": "package:../../../packages/db/src/mappers/project",
+      "name": "project",
+      "order": 2000
+    },
+    {
+      "id": "database:Database",
+      "name": "Database",
+      "order": 5000
+    }
+  ],
+  "rootActions": [
+    {
+      "nodeType": 4,
+      "callee": "http:HTTP server requests",
+      "route": "POST /api/trpc/:param",
+      "status": 200,
+      "digest": "290b12ecd35abea8a0c2d04cf4c78ec0a870cc57ba571f5d5bc5939539922ea8",
+      "subtreeDigest": "unknown",
+      "children": [
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:src/server/api/routers/project",
+          "name": "verifyProjectAccess",
+          "static": true,
+          "digest": "007ed812eca396f15497785cc8e12fcb17fbf4b283192d8957bc12b8cb83e984",
+          "subtreeDigest": "unknown",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "src/server/api/routers/project/helper.verifyProjectAccess",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "Promise<undefined>"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 6,
+              "caller": "package:src/server/api/routers/project",
+              "callee": "database:Database",
+              "query": "select \"projects\".\"id\", \"projects\".\"name\", \"projects\".\"description\", \"projects\".\"tags\", \"projects\".\"created_at\", \"projects\".\"updated_at\", \"projects\".\"preview_img_url\", \"projects\".\"preview_img_path\", \"projects\".\"preview_img_bucket\", \"projects\".\"updated_preview_img_at\", \"projects\".\"sandbox_id\", \"projects\".\"sandbox_url\", \"projects_userProjects\".\"data\" as \"userProjects\" from \"projects\" \"projects\" left join lateral (select coalesce(json_agg(json_build_array(\"projects_userProjects\".\"user_id\", \"projects_userProjects\".\"project_id\", \"projects_userProjects\".\"created_at\", \"projects_userProjects\".\"role\")), ?::json) as \"data\" from \"user_projects\" \"projects_userProjects\" where (\"projects_userProjects\".\"project_id\" = \"projects\".\"id\" and \"projects_userProjects\".\"user_id\" = $?)) \"projects_userProjects\" on ? where \"projects\".\"id\" = $? limit $?",
+              "digest": "02163ab161ffd473a17abd4450de9c2b7018014b819d6717125b3a9d38fffb4f",
+              "subtreeDigest": "unknown",
+              "children": [],
+              "elapsed": 0.00018254597671329975,
+              "eventIds": [
+                3
+              ],
+              "diffMode": 1
+            }
+          ],
+          "elapsed": 0.003862279001623392,
+          "eventIds": [
+            2
+          ],
+          "labels": [
+            "security.authorization"
+          ],
+          "diffMode": 1
+        },
+        {
+          "nodeType": 6,
+          "caller": "http:HTTP server requests",
+          "callee": "database:Database",
+          "query": "update \"projects\" set \"id\" = $?, \"name\" = $?, \"updated_at\" = $? where \"projects\".\"id\" = $? returning \"id\", \"name\", \"description\", \"tags\", \"created_at\", \"updated_at\", \"preview_img_url\", \"preview_img_path\", \"preview_img_bucket\", \"updated_preview_img_at\", \"sandbox_id\", \"sandbox_url\"",
+          "digest": "ee103fd0e85eab7381e88680df69bf6771fedfcdab68ed80bba502308bcc5ecb",
+          "subtreeDigest": "unknown",
+          "children": [],
+          "elapsed": 0.000376800075173378,
+          "eventIds": [
+            6
+          ]
+        },
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:../../../packages/db/src/mappers/project",
+          "name": "fromDbProject",
+          "static": true,
+          "digest": "1c7e2df83736a1b231ef3c6fe4628e3d379ba90fbda41130eba631d70b4d3912",
+          "subtreeDigest": "unknown",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "../../../packages/db/src/mappers/project/project.fromDbProject",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "Object",
+              "properties": [
+                "id:String",
+                "metadata:Object",
+                "name:String"
+              ]
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 3,
+              "caller": "package:../../../packages/db/src/mappers/project",
+              "callee": "package:../../../packages/db/src/mappers/project",
+              "name": "fromDbPreviewImg",
+              "static": true,
+              "digest": "10c8542562dba5d5b00eea0c7572587f9920205edd23992a3b97ae958024c5f9",
+              "subtreeDigest": "unknown",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "../../../packages/db/src/mappers/project/project.fromDbPreviewImg",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "object"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.000004918081685900688,
+              "eventIds": [
+                9
+              ],
+              "diffMode": 1
+            }
+          ],
+          "elapsed": 0.00016916892491281033,
+          "eventIds": [
+            8
+          ],
+          "diffMode": 1
+        },
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:project",
+          "name": "fromDbProject",
+          "static": true,
+          "digest": "delete:3ef64495aa8518d953351c137bed00de0ba4b527564471231ce84ded01b066dd",
+          "subtreeDigest": "unknown",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "project/project.fromDbProject",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "Object",
+              "properties": [
+                "id:String",
+                "metadata:Object",
+                "name:String"
+              ]
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 3,
+              "caller": "package:project",
+              "callee": "package:project",
+              "name": "fromDbPreviewImg",
+              "static": true,
+              "digest": "delete:c27cd571826be62697fb389f575283c300bc14cd9a5eddf3d9d3eadecd94ab2f",
+              "subtreeDigest": "unknown",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "project/project.fromDbPreviewImg",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "object"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.00000385800376534462,
+              "eventIds": [
+                5
+              ],
+              "diffMode": 2
+            }
+          ],
+          "elapsed": 0.00015499908477067947,
+          "eventIds": [
+            4
+          ],
+          "diffMode": 2
+        }
+      ],
+      "elapsed": 0.4319678880274296,
+      "eventIds": [
+        1
+      ]
+    }
+  ]
+}

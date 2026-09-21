@@ -1,0 +1,173 @@
+# Gold-traces manifest — gold_traces/manifest.yaml (managed by the appmap-gold-traces skill).
+#
+# One file describes the whole gold set for this package: HOW to record
+# (commands) and WHAT to record (entries). Paths are NOT configured — they are
+# derived from the layout: the record/appmap commands run from this file's
+# parent directory (apps/web/client), and recordings are read from where the
+# nearest-ancestor appmap.yml puts them (its directory + its appmap_dir).
+
+schema_version: 2
+
+commands:
+  # Server-side tests run under Node with vitest (the default vitest.config.ts
+  # is the Storybook browser project, so the Node config is passed as an arg).
+  # The engine's default vitest launcher is `npx appmap-node npx vitest run`.
+  framework: vitest
+  args: --config vitest.server.config.ts
+
+  # The tests need a PostgreSQL database with the project's migrations applied.
+  # SUPABASE_DATABASE_URL selects it; unset, vitest.server.config.ts falls back
+  # to the local Supabase database (postgresql://postgres:postgres@127.0.0.1:54322/postgres).
+  record_env:
+    APPMAP_DISPLAY_PARAMS: "true"
+
+# The curated recordings that form the behavior baseline. Each entry:
+#   feature      functional area name (used to group entries)
+#   test_file    the test file, relative to this file's parent dir
+#   test_name    the test title, matched as a vitest -t regex
+#   appmap_path  recording path relative to appmap_dir — from the engine's `discover`
+#   summary      short human context for what the trace demonstrates
+entries:
+  # Project router: the project itself, over HTTP through the real appRouter.
+  - feature: project
+    test_file: test/server/project.test.ts
+    test_name: project.list called by the owner
+    appmap_path: vitest/project.list_called_by_the_owner.appmap.json
+    summary: >-
+      A member lists their projects through project.list. The list is built
+      from the caller's own membership rows, so it is the one project read that
+      is scoped to the caller by construction.
+  - feature: project
+    test_file: test/server/project.test.ts
+    test_name: project.get called by the owner
+    appmap_path: vitest/project.get_called_by_the_owner.appmap.json
+    summary: >-
+      A member opens their own project through project.get. The happy path of
+      the project read.
+  - feature: project
+    test_file: test/server/project.test.ts
+    test_name: project.update called by the owner
+    appmap_path: vitest/project.update_called_by_the_owner.appmap.json
+    summary: >-
+      A member renames their own project through project.update. The happy
+      path of the project write; the membership path that any check must keep
+      open.
+  - feature: project
+    test_file: test/server/project.test.ts
+    test_name: project.delete called by the owner
+    appmap_path: vitest/project.delete_called_by_the_owner.appmap.json
+    summary: >-
+      A member deletes their own project through project.delete. Shows the
+      transaction and the order of the deletes.
+  - feature: project
+    test_file: test/server/project.test.ts
+    test_name: project.get without signing in
+    appmap_path: vitest/project.get_without_signing_in.appmap.json
+    summary: >-
+      A request with no session asks for a project. Negative branch of the
+      sign-in check in protectedProcedure: refused with 401 before any SQL.
+  - feature: project
+    test_file: test/server/project.test.ts
+    test_name: project.get called by a non-member
+    appmap_path: vitest/project.get_called_by_a_non-member.appmap.json
+    summary: >-
+      A signed in user who is not a member reads someone else's project through
+      project.get. Negative branch of the owner read: same route, different
+      caller. Guards whether the read checks membership.
+  - feature: project
+    test_file: test/server/project.test.ts
+    test_name: project.update called by a non-member
+    appmap_path: vitest/project.update_called_by_a_non-member.appmap.json
+    summary: >-
+      A non-member renames someone else's project through project.update.
+      Negative branch of the owner write: same route, different caller. Guards
+      whether the write checks membership.
+  - feature: project
+    test_file: test/server/project.test.ts
+    test_name: project.delete called by a non-member
+    appmap_path: vitest/project.delete_called_by_a_non-member.appmap.json
+    summary: >-
+      A non-member deletes someone else's project through project.delete.
+      Negative branch of the owner delete. Guards whether deletion checks
+      membership.
+  # Settings router: the commands that run in the project's sandbox.
+  - feature: settings
+    test_file: test/server/settings.test.ts
+    test_name: settings.upsert called by the owner
+    appmap_path: vitest/settings.upsert_called_by_the_owner.appmap.json
+    summary: >-
+      A member changes the run command of their own project through
+      settings.upsert. The happy path of the settings write.
+  - feature: settings
+    test_file: test/server/settings.test.ts
+    test_name: settings.upsert called by a non-member
+    appmap_path: vitest/settings.upsert_called_by_a_non-member.appmap.json
+    summary: >-
+      A non-member rewrites the run command of someone else's project through
+      settings.upsert. Negative branch of the owner write. Guards whether the
+      settings router checks membership.
+  # Member router: who belongs to a project.
+  - feature: member
+    test_file: test/server/member.test.ts
+    test_name: member.list called by the owner
+    appmap_path: vitest/member.list_called_by_the_owner.appmap.json
+    summary: >-
+      A member lists the members of their own project through member.list.
+      The happy path of the membership read, joining user_projects to users.
+  - feature: member
+    test_file: test/server/member.test.ts
+    test_name: member.remove called by a non-member
+    appmap_path: vitest/member.remove_called_by_a_non-member.appmap.json
+    summary: >-
+      A non-member removes the owner from someone else's project through
+      member.remove. Negative branch of the membership write. Guards whether
+      the member router checks membership.
+  # Branch router: a project's branches, each tied to a sandbox.
+  - feature: branch
+    test_file: test/server/branch.test.ts
+    test_name: branch.getByProjectId called by the owner
+    appmap_path: vitest/branch.getByProjectId_called_by_the_owner.appmap.json
+    summary: >-
+      A member lists the branches of their own project through
+      branch.getByProjectId. The happy path of the branch read.
+  # Added after reviewing the change that introduced the membership check
+  # (verifyProjectAccess): the guarded procedures the baseline did not run, and
+  # the helper's other branch.
+  - feature: project
+    test_file: test/server/project.test.ts
+    test_name: project.addTag called by the owner
+    appmap_path: vitest/project.addTag_called_by_the_owner.appmap.json
+    summary: >-
+      A member tags their own project through project.addTag. The happy path
+      of the tag write; the membership path the check must keep open.
+  - feature: project
+    test_file: test/server/project.test.ts
+    test_name: project.addTag called by a non-member
+    appmap_path: vitest/project.addTag_called_by_a_non-member.appmap.json
+    summary: >-
+      A non-member tags someone else's project through project.addTag.
+      Negative branch of the owner tag write. Guards whether addTag checks
+      membership.
+  - feature: project
+    test_file: test/server/project.test.ts
+    test_name: project.removeTag called by a non-member
+    appmap_path: vitest/project.removeTag_called_by_a_non-member.appmap.json
+    summary: >-
+      A non-member removes a tag from someone else's project through
+      project.removeTag. Guards whether removeTag checks membership.
+  - feature: project
+    test_file: test/server/project.test.ts
+    test_name: project.captureScreenshot called by a non-member
+    appmap_path: vitest/project.captureScreenshot_called_by_a_non-member.appmap.json
+    summary: >-
+      A non-member asks for a screenshot of someone else's project through
+      project.captureScreenshot. The procedure reports failure in its return
+      value, so the test passes for more than one reason; the recording shows
+      which one.
+  - feature: project
+    test_file: test/server/project.test.ts
+    test_name: project.update of a project that does not exist
+    appmap_path: vitest/project.update_of_a_project_that_does_not_exist.appmap.json
+    summary: >-
+      A member renames a project id that does not exist. The empty-result
+      branch of the project write, and of the membership check.

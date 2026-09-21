@@ -1,0 +1,2 @@
+added function call `project.verifyProjectAccess`
+removed SQL `update "projects" set "id" = $?, "name" = $?, "updated_at" = $? where "projects"."id" = $? returning "id", "name", "description", "tags", "created_at", "updated_at", "preview_img_url", "preview_img_path", "preview_img_bucket", "updated_preview_img_at", "sandbox_id", "sandbox_url"`

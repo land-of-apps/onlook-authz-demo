@@ -1,0 +1,103 @@
+[1mdiff --git a/apps/web/client/src/server/api/routers/project/helper.ts b/apps/web/client/src/server/api/routers/project/helper.ts[m
+[1mindex e2f60373..b522900d 100644[m
+[1m--- a/apps/web/client/src/server/api/routers/project/helper.ts[m
+[1m+++ b/apps/web/client/src/server/api/routers/project/helper.ts[m
+[36m@@ -1,4 +1,8 @@[m
+[31m-import { type Frame } from "@onlook/db";[m
+[32m+[m[32mimport { eq } from "drizzle-orm";[m
+[32m+[m[32mimport { type Frame, projects, userProjects, type DrizzleDb } from "@onlook/db";[m
+[32m+[m
+[32m+[m[32m/** Type representing a db instance or transaction that has query capabilities */[m
+[32m+[m[32mtype DbOrTx = Pick<DrizzleDb, 'query'>;[m
+ [m
+ export function extractCsbPort(frames: Frame[]): number | null {[m
+     if (!frames || frames.length === 0) return null;[m
+[36m@@ -17,3 +21,32 @@[m [mexport function extractCsbPort(frames: Frame[]): number | null {[m
+     }[m
+     return null;[m
+ }[m
+[32m+[m
+[32m+[m[32m/**[m
+[32m+[m[32m * Verifies that a user has access to a project by checking the userProjects table.[m
+[32m+[m[32m * @throws Error if the user does not have access to the project or if it doesn't exist[m
+[32m+[m[32m *[m
+[32m+[m[32m * Note: This function intentionally returns the same error message whether the project[m
+[32m+[m[32m * doesn't exist or the user lacks access to prevent information disclosure about[m
+[32m+[m[32m * project existence.[m
+[32m+[m[32m *[m
+[32m+[m[32m * Accepts either a db instance or a transaction to support atomic authorization checks.[m
+[32m+[m[32m */[m
+[32m+[m[32mexport async function verifyProjectAccess([m
+[32m+[m[32m    db: DbOrTx,[m
+[32m+[m[32m    userId: string,[m
+[32m+[m[32m    projectId: string,[m
+[32m+[m[32m): Promise<void> {[m
+[32m+[m[32m    const project = await db.query.projects.findFirst({[m
+[32m+[m[32m        where: eq(projects.id, projectId),[m
+[32m+[m[32m        with: {[m
+[32m+[m[32m            userProjects: {[m
+[32m+[m[32m                where: eq(userProjects.userId, userId),[m
+[32m+[m[32m            },[m
+[32m+[m[32m        },[m
+[32m+[m[32m    });[m
+[32m+[m
+[32m+[m[32m    if (!project || project.userProjects.length === 0) {[m
+[32m+[m[32m        throw new Error('Unauthorized or not found');[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+[1mdiff --git a/apps/web/client/src/server/api/routers/project/project.ts b/apps/web/client/src/server/api/routers/project/project.ts[m
+[1mindex a110db5b..bfece724 100644[m
+[1m--- a/apps/web/client/src/server/api/routers/project/project.ts[m
+[1m+++ b/apps/web/client/src/server/api/routers/project/project.ts[m
+[36m@@ -37,7 +37,7 @@[m [mimport { and, eq, ne } from 'drizzle-orm';[m
+ import { z } from 'zod';[m
+ import { projectCreateRequestRouter } from './createRequest';[m
+ import { fork } from './fork';[m
+[31m-import { extractCsbPort } from './helper';[m
+[32m+[m[32mimport { extractCsbPort, verifyProjectAccess } from './helper';[m
+ [m
+ export const projectRouter = createTRPCRouter({[m
+     hasAccess: protectedProcedure[m
+[36m@@ -59,6 +59,7 @@[m [mexport const projectRouter = createTRPCRouter({[m
+         .input(z.object({ projectId: z.string() }))[m
+         .mutation(async ({ ctx, input }) => {[m
+             try {[m
+[32m+[m[32m                await verifyProjectAccess(ctx.db, ctx.user.id, input.projectId);[m
+                 if (!env.FIRECRAWL_API_KEY) {[m
+                     throw new Error('FIRECRAWL_API_KEY is not configured');[m
+                 }[m
+[36m@@ -349,8 +350,9 @@[m [mexport const projectRouter = createTRPCRouter({[m
+         .input(z.object({ id: z.string() }))[m
+         .mutation(async ({ ctx, input }) => {[m
+             await ctx.db.transaction(async (tx) => {[m
+[31m-                await tx.delete(projects).where(eq(projects.id, input.id));[m
+[32m+[m[32m                await verifyProjectAccess(tx, ctx.user.id, input.id);[m
+                 await tx.delete(userProjects).where(eq(userProjects.projectId, input.id));[m
+[32m+[m[32m                await tx.delete(projects).where(eq(projects.id, input.id));[m
+             });[m
+         }),[m
+     getPreviewProjects: protectedProcedure[m
+[36m@@ -365,6 +367,7 @@[m [mexport const projectRouter = createTRPCRouter({[m
+             return projects.map((project) => fromDbProject(project.project));[m
+         }),[m
+     update: protectedProcedure.input(projectUpdateSchema).mutation(async ({ ctx, input }) => {[m
+[32m+[m[32m        await verifyProjectAccess(ctx.db, ctx.user.id, input.id);[m
+         const [updatedProject] = await ctx.db.update(projects).set({[m
+             ...input,[m
+             updatedAt: new Date(),[m
+[36m@@ -380,6 +383,7 @@[m [mexport const projectRouter = createTRPCRouter({[m
+         projectId: z.string(),[m
+         tag: z.string(),[m
+     })).mutation(async ({ ctx, input }) => {[m
+[32m+[m[32m        await verifyProjectAccess(ctx.db, ctx.user.id, input.projectId);[m
+         const project = await ctx.db.query.projects.findFirst({[m
+             where: eq(projects.id, input.projectId),[m
+         });[m
+[36m@@ -404,6 +408,7 @@[m [mexport const projectRouter = createTRPCRouter({[m
+         projectId: z.string(),[m
+         tag: z.string(),[m
+     })).mutation(async ({ ctx, input }) => {[m
+[32m+[m[32m        await verifyProjectAccess(ctx.db, ctx.user.id, input.projectId);[m
+         const project = await ctx.db.query.projects.findFirst({[m
+             where: eq(projects.id, input.projectId),[m
+         });[m
