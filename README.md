@@ -48,6 +48,13 @@ database. Everything it shows is committed here.
     NO_VISUAL=1 ./demo.sh   terminal only
     DEMO_AUTO=1 ./demo.sh   no pauses, no windows
 
+Keys, at every pause:
+
+    Enter, Space   continue
+    →  ←           next step, previous step
+    l              list the steps and jump to one by number
+    q, Escape      quit
+
 The demo prints each working command without running it, then shows what that command
 produced. Those outputs are real. `scripts/demo-build.sh` made them from actual runs. Only
 the viewers really start: `code`, and `appmap query ui` on ports 4476 and 4477.
